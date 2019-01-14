@@ -8,7 +8,7 @@ using UnityEngine;
 using GlobalEnums;
 using On;
 using IL;
-
+using System.IO;
 
 namespace UnlimitedPower
 {
@@ -37,6 +37,26 @@ namespace UnlimitedPower
         //{
 
         //}
+        private static Texture2D loadImageFromAssembly(string imageName)
+        {
+            //Create texture from bytes
+            Texture2D tex = new Texture2D(1, 1);
+            tex.LoadImage(getBytes(imageName));
+            return tex;
+        }
+
+        private static byte[] getBytes(string filename)
+        {
+            Stream dataStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(filename);
+            if (dataStream == null) return null;
+
+            byte[] buffer = new byte[dataStream.Length];
+            dataStream.Read(buffer, 0, buffer.Length);
+            dataStream.Dispose();
+            return buffer;
+        }
+
+
 
         public void OnAttack(AttackDirection dir)
         {
